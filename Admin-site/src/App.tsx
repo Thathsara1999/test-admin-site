@@ -9,7 +9,7 @@ import Profile from "./pages/dashbord/Profile";
 import Reports from "./pages/dashbord/Reports";
 import Chatbot from "./pages/dashbord/Chatbot";
 import Notifications from "./pages/dashbord/Notification";
-import BabyForm from "./pages/dashbord/BabyForm";
+// import BabyForm from "./pages/dashbord/BabyForm";
 import AdminDashboard from "./pages/admin/admin";
 import GrowthAnalysis from "./pages/dashbord/GrowthAnalysis";
 import { BirthRegistrationForm } from "./pages/dashbord/Birthregistrationform";
@@ -50,7 +50,7 @@ export default function App() {
           <Route path="reports" element={<Reports />} />
           <Route path="chatbot" element={<Chatbot />} />
           <Route path="notifications" element={<Notifications />} />
-          <Route path="babyform" element={<BabyForm />} />
+          {/* <Route path="babyform" element={<BabyForm />} /> */}
           <Route path="growth" element={<GrowthAnalysis />} />
           <Route path="birthregistration" element={<BirthRegistrationForm />} />
           <Route

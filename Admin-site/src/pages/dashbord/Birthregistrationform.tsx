@@ -1,70 +1,66 @@
 import React, { useState } from "react";
+import axios from "axios";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 interface BirthRegistrationData {
-  // Baby Information
   babyName: string;
   registrationNumber: string;
   dateOfBirth: string;
   timeOfBirth: string;
   placeOfBirth: string;
   sex: "male" | "female" | "";
-
-  // Birth Details
   deliveryType: "normal" | "cesarean" | "";
   gestationalAge: string;
   birthWeight: string;
   birthLength: string;
   headCircumference: string;
-
-  // Hospital Information
   hospital: string;
   ward: string;
   bedNumber: string;
-
-  // Parent Information
   motherName: string;
   motherAge: string;
   fatherName: string;
   fatherAge: string;
   address: string;
   contactNumber: string;
-
-  // Medical Officer
   medicalOfficer: string;
   nurseInCharge: string;
-
-  // Additional Notes
   complications: string;
   remarks: string;
 }
 
+const initialFormData: BirthRegistrationData = {
+  babyName: "",
+  registrationNumber: "",
+  dateOfBirth: "",
+  timeOfBirth: "",
+  placeOfBirth: "",
+  sex: "",
+  deliveryType: "",
+  gestationalAge: "",
+  birthWeight: "",
+  birthLength: "",
+  headCircumference: "",
+  hospital: "",
+  ward: "",
+  bedNumber: "",
+  motherName: "",
+  motherAge: "",
+  fatherName: "",
+  fatherAge: "",
+  address: "",
+  contactNumber: "",
+  medicalOfficer: "",
+  nurseInCharge: "",
+  complications: "",
+  remarks: "",
+};
+
 export const BirthRegistrationForm: React.FC = () => {
-  const [formData, setFormData] = useState<BirthRegistrationData>({
-    babyName: "",
-    registrationNumber: "",
-    dateOfBirth: "",
-    timeOfBirth: "",
-    placeOfBirth: "",
-    sex: "",
-    deliveryType: "",
-    gestationalAge: "",
-    birthWeight: "",
-    birthLength: "",
-    headCircumference: "",
-    hospital: "",
-    ward: "",
-    bedNumber: "",
-    motherName: "",
-    motherAge: "",
-    fatherName: "",
-    fatherAge: "",
-    address: "",
-    contactNumber: "",
-    medicalOfficer: "",
-    nurseInCharge: "",
-    complications: "",
-    remarks: "",
-  });
+  const [formData, setFormData] =
+    useState<BirthRegistrationData>(initialFormData);
+  const [loading, setLoading] = useState(false);
 
   const handleInputChange = (
     e: React.ChangeEvent<
@@ -75,12 +71,36 @@ export const BirthRegistrationForm: React.FC = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Birth Registration Data:", formData);
-    // Handle form submission
-  };
+    setLoading(true);
 
+    try {
+      const response = await axios.post(
+        "http://localhost:5001/child-app-2b2c3/us-central1/registerBaby",
+        formData,
+      );
+      console.log("Response:", response.data);
+
+      // Show success toast
+      toast.success("Birth registration saved successfully!", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+
+      setFormData(initialFormData); // clear form
+    } catch (error) {
+      console.error("Error submitting birth data:", error);
+
+      // Show error toast
+      toast.error("Failed to save birth registration.", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
   return (
     <div className="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-lg">
       <div className="mb-6 border-b pb-4">
