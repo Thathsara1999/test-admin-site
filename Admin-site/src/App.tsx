@@ -15,6 +15,7 @@ import GrowthAnalysis from "./pages/dashbord/GrowthAnalysis";
 import { BirthRegistrationForm } from "./pages/dashbord/Birthregistrationform";
 import { NeonatalExaminationForm } from "./pages/dashbord/Neonatalexaminationform";
 import { ImmunizationRecordForm } from "./pages/dashbord/Immunizationrecordform";
+import UploadChart from "./pages/dashbord/uploadChart";
 
 export default function App() {
   const handleSelectChild = (child: any) => {
@@ -60,6 +61,7 @@ export default function App() {
             path="immunizationrecord"
             element={<ImmunizationRecordForm />}
           />
+          <Route path="upload-chart" element={<UploadChart childId="" />} />
         </Route>
 
         {/* 404 */}

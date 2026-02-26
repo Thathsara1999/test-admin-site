@@ -42,6 +42,7 @@ export default function MainLayout() {
       label: "Immunization Record",
       path: "/dashboard/immunizationrecord",
     },
+    { icon: Baby, label: "Upload Chart", path: "/dashboard/upload-chart" },
   ];
 
   return (

@@ -27,6 +27,7 @@ export default function MainLayout({ children }: MainLayoutProps) {
     { icon: FileText, label: "Records", path: "/dashboard/reports" },
     { icon: MessageCircle, label: "Chat", path: "/dashboard/chat" },
     { icon: Bell, label: "Notifications", path: "/dashboard/notifications" },
+    { icon: Baby, label: "Upload Chart", path: "/dashboard/upload-chart" },
   ];
 
   return (
