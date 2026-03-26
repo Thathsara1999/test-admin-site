@@ -44,7 +44,7 @@ export default function SignIn() {
       localStorage.setItem("authToken", token || "");
 
       await axios.get(
-        "http://localhost:5001/child-health-system-6ba6d/us-central1/verifyToken",
+        "http://localhost:5002/child-health-system-6ba6d/us-central1/verifyToken",
         {
           headers: {
             Authorization: `Bearer ${token}`,
