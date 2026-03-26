@@ -8,7 +8,7 @@ type Appointment = {
   dueDate: string; // ISO string
 };
 
-const NotificationPages: React.FC = () => {
+const NotificationPage: React.FC = () => {
   const [appointments, setAppointments] = useState<Appointment[]>([
     {
       id: "1",
@@ -31,7 +31,7 @@ const NotificationPages: React.FC = () => {
   // Initialize audio on component mount
   useEffect(() => {
     // Create audio element with correct public folder path
-    alarmRef.current = new Audio("../../../public/alarm.mp3"); // Just /alarm.mp3, not "../../../public/alarm.mp3"
+    alarmRef.current = new Audio("/alarm.mp3"); // Just /alarm.mp3, not "../../../public/alarm.mp3"
     alarmRef.current.load();
 
     // Clean up on unmount
@@ -256,4 +256,4 @@ const NotificationPages: React.FC = () => {
   );
 };
 
-export default NotificationPages;
+export default NotificationPage;

@@ -55,6 +55,47 @@ export default function Profile() {
   const minHeight = Math.min(...heightValues, 50);
   const maxHeight = Math.max(...heightValues, 120);
 
+  /* ---------------- BMI LOGIC ---------------- */
+
+  const latest =
+    growthRecords.length > 0 ? growthRecords[growthRecords.length - 1] : null;
+
+  let bmi: number | null = null;
+  let bmiCategory = "";
+  let bmiColor = "";
+  let healthMessage = "";
+
+  if (latest) {
+    const h = latest.height / 100;
+    bmi = latest.weight / (h * h);
+
+    if (bmi < 18.5) {
+      bmiCategory = "Underweight";
+      bmiColor = "text-blue-500";
+      healthMessage =
+        "Child may need better nutrition. Consider consulting a pediatrician.";
+    } else if (bmi < 25) {
+      bmiCategory = "Normal";
+      bmiColor = "text-green-500";
+      healthMessage = "Healthy growth. Keep maintaining balanced nutrition.";
+    } else if (bmi < 30) {
+      bmiCategory = "Overweight";
+      bmiColor = "text-yellow-500";
+      healthMessage =
+        "Monitor diet and physical activity to maintain healthy growth.";
+    } else {
+      bmiCategory = "Obese";
+      bmiColor = "text-red-500";
+      healthMessage =
+        "Medical advice recommended for proper health management.";
+    }
+  }
+
+  const bmiHistory = growthRecords.map((r) => {
+    const h = r.height / 100;
+    return r.weight / (h * h);
+  });
+
   return (
     <div className="p-6">
       {/* Profile Header */}
@@ -298,6 +339,75 @@ export default function Profile() {
           </svg>
         </div>
       </div>
+      {/* BMI SECTION */}
+      {bmi && (
+        <div className="bg-white p-6 rounded-xl shadow-md text-center">
+          <h3 className="font-bold mb-4 flex justify-center items-center">
+            <TrendingUp className="w-5 h-5 mr-2 text-purple-600" />
+            Body Mass Index
+          </h3>
+
+          {/* Circular Gauge */}
+          <div className="relative w-40 h-40 mx-auto">
+            <svg viewBox="0 0 120 120" className="w-full h-full">
+              <circle
+                cx="60"
+                cy="60"
+                r="50"
+                stroke="#e5e7eb"
+                strokeWidth="10"
+                fill="none"
+              />
+              <circle
+                cx="60"
+                cy="60"
+                r="50"
+                stroke="currentColor"
+                strokeWidth="10"
+                fill="none"
+                strokeDasharray="314"
+                strokeDashoffset={314 - (Math.min(bmi, 40) / 40) * 314}
+                className={`${bmiColor} transition-all duration-700`}
+                strokeLinecap="round"
+                transform="rotate(-90 60 60)"
+              />
+            </svg>
+
+            <div className="absolute inset-0 flex flex-col items-center justify-center">
+              <span className="text-2xl font-bold">{bmi.toFixed(1)}</span>
+              <span className={`text-sm ${bmiColor}`}>{bmiCategory}</span>
+            </div>
+          </div>
+
+          {/* Health Message */}
+          <p className="mt-4 text-sm text-gray-600">{healthMessage}</p>
+
+          {/* BMI History Mini Chart */}
+          <div className="mt-6">
+            <h4 className="text-sm font-semibold mb-2">BMI Progress</h4>
+            <svg viewBox="0 0 300 100" className="w-full h-24">
+              {bmiHistory.map((val, i) => {
+                const x = (i / (bmiHistory.length - 1 || 1)) * 280 + 10;
+                const y = 90 - (val / 40) * 80;
+                return <circle key={i} cx={x} cy={y} r="4" fill="green" />;
+              })}
+
+              <path
+                d={bmiHistory
+                  .map((val, i) => {
+                    const x = (i / (bmiHistory.length - 1 || 1)) * 280 + 10;
+                    const y = 90 - (val / 40) * 80;
+                    return `${i === 0 ? "M" : "L"} ${x} ${y}`;
+                  })
+                  .join(" ")}
+                fill="none"
+                stroke="green"
+                strokeWidth="2"
+              />
+            </svg>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

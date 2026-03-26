@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { useState } from "react"; // Add this import
 
 import SignIn from "./pages/auth/SignIn";
 import SignUp from "./pages/auth/SignUp";
@@ -8,7 +9,7 @@ import MainLayout from "./components/MainLayout";
 import Profile from "./pages/dashbord/Profile";
 import Reports from "./pages/dashbord/Reports";
 import Chatbot from "./pages/dashbord/Chatbot";
-import Notifications from "./pages/dashbord/Notification";
+import NotificationPage from "./pages/Notification";
 // import BabyForm from "./pages/dashbord/BabyForm";
 import AdminDashboard from "./pages/admin/admin";
 import GrowthAnalysis from "./pages/dashbord/GrowthAnalysis";
@@ -16,14 +17,37 @@ import { BirthRegistrationForm } from "./pages/dashbord/Birthregistrationform";
 import { NeonatalExaminationForm } from "./pages/dashbord/Neonatalexaminationform";
 import { ImmunizationRecordForm } from "./pages/dashbord/Immunizationrecordform";
 import UploadChart from "./pages/dashbord/uploadChart";
+import { ToastContainer } from "react-toastify";
+import { BabyView } from "./pages/dashbord/BabyView";
+import ChartUpload from "./pages/dashbord/ChartUpload";
 
 export default function App() {
+  const [chartUploadLoading, setChartUploadLoading] = useState(false);
+
   const handleSelectChild = (child: any) => {
     console.log("Selected child:", child);
   };
 
+  const handleChartUpload = (data: Record<string, any>) => {
+    console.log("Chart uploaded:", data);
+    // You can add additional logic here like showing a toast notification
+  };
+
   return (
     <BrowserRouter>
+      {/* Toast container added here */}
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+      />
       <Routes>
         {/* Redirect root */}
         <Route path="/" element={<Navigate to="/signin" replace />} />
@@ -49,7 +73,7 @@ export default function App() {
           <Route path="profile" element={<Profile />} />
           <Route path="reports" element={<Reports />} />
           <Route path="chatbot" element={<Chatbot />} />
-          <Route path="notifications" element={<Notifications />} />
+          <Route path="notification" element={<NotificationPage />} />
           {/* <Route path="babyform" element={<BabyForm />} /> */}
           <Route path="growth" element={<GrowthAnalysis />} />
           <Route path="birthregistration" element={<BirthRegistrationForm />} />
@@ -62,6 +86,18 @@ export default function App() {
             element={<ImmunizationRecordForm />}
           />
           <Route path="upload-chart" element={<UploadChart childId="" />} />
+          {/* // <Route path="babycardupload" element={<BabyCardUpload />} /> */}
+          <Route path="babyview/:babyId" element={<BabyView />} />
+          <Route
+            path="chart-upload"
+            element={
+              <ChartUpload
+                onUpload={handleChartUpload}
+                onLoading={setChartUploadLoading}
+                isLoading={chartUploadLoading}
+              />
+            }
+          />
         </Route>
 
         {/* 404 */}

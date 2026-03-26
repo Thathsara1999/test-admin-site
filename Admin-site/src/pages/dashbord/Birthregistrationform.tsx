@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { auth } from "../../firebase";
 
 interface BirthRegistrationData {
   babyName: string;
@@ -74,11 +75,26 @@ export const BirthRegistrationForm: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-
+    const token = await auth.currentUser?.getIdToken();
+    console.log("Submitting form with token:", token);
+    // if (!token) {
+    //   toast.error("You must be logged in to submit the form.", {
+    //     position: "top-right",
+    //     autoClose: 3000,
+    //   });
+    //   setLoading(false);
+    //   return;
+    // }
+    // const token = await auth.currentUser?.getIdToken();
     try {
       const response = await axios.post(
-        "http://localhost:5001/child-app-2b2c3/us-central1/registerBaby",
+        "http://localhost:5001/child-health-system-6ba6d/us-central1/registerBaby",
         formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
       );
       console.log("Response:", response.data);
 

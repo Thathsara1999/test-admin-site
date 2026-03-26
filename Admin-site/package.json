@@ -12,6 +12,7 @@
     "@types/react": "^19.2.9",
     "@types/react-dom": "^19.2.3",
     "axios": "^1.13.2",
+    "cors": "^2.8.6",
     "firebase": "^12.9.0",
     "lucide-react": "^0.562.0",
     "react": "^19.2.3",
@@ -49,6 +50,7 @@
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.1.18",
+    "@types/tesseract.js": "^0.0.2",
     "autoprefixer": "^10.4.23",
     "postcss": "^8.5.6",
     "tailwindcss": "^3.4.19"

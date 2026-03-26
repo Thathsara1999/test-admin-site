@@ -12,6 +12,8 @@ import {
   Menu,
   FilePlus,
   LineChart,
+  ClipboardList,
+  Upload,
 } from "lucide-react";
 
 export default function MainLayout() {
@@ -19,44 +21,87 @@ export default function MainLayout() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const menuItems = [
-    { icon: Home, label: "Dashboard", path: "/dashboard" },
-    { icon: User, label: "Profiles", path: "/dashboard/profile" },
-    { icon: FileText, label: "Records", path: "/dashboard/reports" },
-    { icon: MessageCircle, label: "Chatbot", path: "/dashboard/chatbot" },
-    { icon: LineChart, label: "Growth", path: "/dashboard/growth" },
-    { icon: Bell, label: "Notifications", path: "/dashboard/notifications" },
-    { icon: FilePlus, label: "Baby Form", path: "/dashboard/babyform" },
+  // 🔥 Grouped Menu (FIXED UI)
+  const menuSections = [
     {
-      icon: Baby,
-      label: "Birth Registration",
-      path: "/dashboard/birthregistration",
+      title: "MAIN",
+      items: [
+        { icon: Home, label: "Dashboard", path: "/dashboard" },
+        { icon: LineChart, label: "Growth", path: "/dashboard/growth" },
+        { icon: MessageCircle, label: "Chatbot", path: "/dashboard/chatbot" },
+      ],
     },
     {
-      icon: Baby,
-      label: "Neonatal Examination",
-      path: "/dashboard/neonatalexamination",
+      title: "MANAGEMENT",
+      items: [
+        { icon: User, label: "Profiles", path: "/dashboard/profile" },
+        { icon: FileText, label: "Records", path: "/dashboard/reports" },
+        { icon: Bell, label: "Notifications", path: "/dashboard/notification" },
+      ],
     },
     {
-      icon: Baby,
-      label: "Immunization Record",
-      path: "/dashboard/immunizationrecord",
+      title: "BABY CARE",
+      items: [
+        { icon: FilePlus, label: "Baby Form", path: "/dashboard/babyform" },
+        {
+          icon: Upload,
+          label: "Baby Card Upload",
+          path: "/dashboard/babycardupload",
+        },
+        { icon: Baby, label: "Baby View", path: "/dashboard/babyview" },
+        {
+          icon: ClipboardList,
+          label: "Birth Registration",
+          path: "/dashboard/birthregistration",
+        },
+        {
+          icon: ClipboardList,
+          label: "Neonatal Exam",
+          path: "/dashboard/neonatalexamination",
+        },
+        {
+          icon: ClipboardList,
+          label: "Immunization",
+          path: "/dashboard/immunizationrecord",
+        },
+      ],
     },
-    { icon: Baby, label: "Upload Chart", path: "/dashboard/upload-chart" },
+    {
+      title: "ANALYTICS",
+      items: [
+        {
+          icon: FileText,
+          label: "Growth Analysis",
+          path: "/dashboard/growth-analysis",
+        },
+        {
+          icon: Upload,
+          label: "Chart Upload",
+          path: "/dashboard/chart-upload",
+        },
+      ],
+    },
   ];
 
   return (
     <div className="flex h-screen bg-gray-50">
+      {/* 🔵 Sidebar */}
       <div
-        className={`${sidebarOpen ? "w-64" : "w-20"} bg-white shadow-lg transition-all duration-300 flex flex-col`}
+        className={`${
+          sidebarOpen ? "w-64" : "w-20"
+        } bg-white shadow-lg transition-all duration-300 flex flex-col`}
       >
+        {/* 🔷 Header */}
         <div className="p-4 border-b border-gray-200 flex items-center justify-between">
           {sidebarOpen && (
             <div className="flex items-center">
               <Baby className="w-8 h-8 text-blue-600 mr-2" />
-              <span className="font-bold text-gray-800">HealthyKids</span>
+              <span className="font-bold text-gray-800 text-lg">
+                HealthyKids
+              </span>
             </div>
           )}
+
           <button
             onClick={() => setSidebarOpen(!sidebarOpen)}
             className="p-2 hover:bg-gray-100 rounded-lg"
@@ -69,30 +114,50 @@ export default function MainLayout() {
           </button>
         </div>
 
-        <nav className="flex-1 p-4">
-          {menuItems.map((item, idx) => {
-            const active = location.pathname === item.path;
-            return (
-              <button
-                key={idx}
-                onClick={() => navigate(item.path)}
-                className={`w-full flex items-center px-4 py-3 rounded-lg transition ${
-                  active
-                    ? "bg-blue-50 text-blue-600"
-                    : "text-gray-700 hover:bg-gray-100"
-                }`}
-              >
-                <item.icon className="w-5 h-5 flex-shrink-0" />
-                {sidebarOpen && <span className="ml-3">{item.label}</span>}
-              </button>
-            );
-          })}
+        {/* 🔷 Menu */}
+        <nav className="flex-1 overflow-y-auto p-3 space-y-4">
+          {menuSections.map((section, sIdx) => (
+            <div key={sIdx}>
+              {/* Section Title */}
+              {sidebarOpen && (
+                <p className="text-xs font-semibold text-gray-400 px-3 mb-2">
+                  {section.title}
+                </p>
+              )}
+
+              {/* Items */}
+              <div className="space-y-1">
+                {section.items.map((item) => {
+                  const active = location.pathname.startsWith(item.path);
+
+                  return (
+                    <button
+                      key={item.path}
+                      title={!sidebarOpen ? item.label : ""}
+                      onClick={() => navigate(item.path)}
+                      className={`w-full flex items-center px-3 py-2 rounded-lg transition-all ${
+                        active
+                          ? "bg-blue-50 text-blue-600"
+                          : "text-gray-700 hover:bg-gray-100"
+                      }`}
+                    >
+                      <item.icon className="w-5 h-5 flex-shrink-0" />
+                      {sidebarOpen && (
+                        <span className="ml-3 text-sm">{item.label}</span>
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
         </nav>
 
-        <div className="p-4 border-t border-gray-200">
+        {/* 🔷 Footer */}
+        <div className="p-3 border-t border-gray-200">
           <button
-            className="w-full flex items-center px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-lg transition"
             onClick={() => navigate("/signin")}
+            className="w-full flex items-center px-3 py-2 text-gray-700 hover:bg-gray-100 rounded-lg transition"
           >
             <LogOut className="w-5 h-5 flex-shrink-0" />
             {sidebarOpen && <span className="ml-3">Logout</span>}
@@ -100,7 +165,8 @@ export default function MainLayout() {
         </div>
       </div>
 
-      <div className="flex-1 overflow-y-auto p-4">
+      {/* 🟢 Main Content */}
+      <div className="flex-1 overflow-y-auto p-6">
         <Outlet />
       </div>
     </div>
