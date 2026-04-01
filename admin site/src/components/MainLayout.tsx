@@ -1,28 +1,39 @@
-import React from "react";
+import React, { useState } from "react";
 import { Outlet, useNavigate, useLocation } from "react-router-dom";
 import {
   Home,
   User,
-  FileText,
   MessageCircle,
   Bell,
   LogOut,
   Baby,
   X,
   Menu,
-  FilePlus,
   LineChart,
-  ClipboardList,
   Upload,
 } from "lucide-react";
+import { LucideIcon } from "lucide-react";
 
-export default function MainLayout() {
-  const [sidebarOpen, setSidebarOpen] = React.useState(true);
+// ✅ Type for menu item
+type MenuItem = {
+  icon: LucideIcon;
+  label: string;
+  path: string;
+};
+
+// ✅ Type for section
+type MenuSection = {
+  title: string;
+  items: MenuItem[];
+};
+
+const MainLayout: React.FC = () => {
+  const [sidebarOpen, setSidebarOpen] = useState<boolean>(true);
   const navigate = useNavigate();
   const location = useLocation();
 
-  // 🔥 Grouped Menu (FIXED UI)
-  const menuSections = [
+  // ✅ Menu configuration
+  const menuSections: MenuSection[] = [
     {
       title: "MAIN",
       items: [
@@ -35,45 +46,17 @@ export default function MainLayout() {
       title: "MANAGEMENT",
       items: [
         { icon: User, label: "Profiles", path: "/dashboard/profile" },
-        // { icon: FileText, label: "Records", path: "/dashboard/reports" },
         { icon: Bell, label: "Notifications", path: "/dashboard/notification" },
-      ],
-    },
-    {
-      title: "BABY CARE",
-      items: [
-        // { icon: FilePlus, label: "Baby Form", path: "/dashboard/babyform" },
-        // {
-        //   icon: Upload,
-        //   label: "Baby Card Upload",
-        //   path: "/dashboard/babycardupload",
-        // },
-        // { icon: Baby, label: "Baby View", path: "/dashboard/babyview" },
-        {
-          icon: ClipboardList,
-          label: "Birth Registration",
-          path: "/dashboard/birthregistration",
-        },
-        {
-          icon: ClipboardList,
-          label: "Neonatal Exam",
-          path: "/dashboard/neonatalexamination",
-        },
-        {
-          icon: ClipboardList,
-          label: "Immunization",
-          path: "/dashboard/immunizationrecord",
-        },
       ],
     },
     {
       title: "ANALYTICS",
       items: [
-        // {
-        //   icon: FileText,
-        //   label: "Growth Analysis",
-        //   path: "/dashboard/growth-analysis",
-        // },
+        {
+          icon: LineChart,
+          label: "Growth Analysis",
+          path: "/dashboard/growth-analysis",
+        },
         {
           icon: Upload,
           label: "Chart Upload",
@@ -128,7 +111,8 @@ export default function MainLayout() {
               {/* Items */}
               <div className="space-y-1">
                 {section.items.map((item) => {
-                  const active = location.pathname.startsWith(item.path);
+                  const Icon = item.icon;
+                  const active = location.pathname === item.path;
 
                   return (
                     <button
@@ -141,7 +125,8 @@ export default function MainLayout() {
                           : "text-gray-700 hover:bg-gray-100"
                       }`}
                     >
-                      <item.icon className="w-5 h-5 flex-shrink-0" />
+                      <Icon className="w-5 h-5 flex-shrink-0" />
+
                       {sidebarOpen && (
                         <span className="ml-3 text-sm">{item.label}</span>
                       )}
@@ -171,4 +156,6 @@ export default function MainLayout() {
       </div>
     </div>
   );
-}
+};
+
+export default MainLayout;

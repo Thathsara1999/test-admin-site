@@ -1,16 +1,16 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { useState } from "react"; // Add this import
+import { useState } from "react";
 
 import SignIn from "./pages/auth/SignIn";
 import SignUp from "./pages/auth/SignUp";
 import Dashboard from "./pages/dashbord/Dashboard";
+import { ChildProfilePage } from "./pages/dashbord/ChildProfilePage";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import MainLayout from "./components/MainLayout";
 import Profile from "./pages/dashbord/Profile";
 import Reports from "./pages/dashbord/Reports";
 import Chatbot from "./pages/dashbord/Chatbot";
 import NotificationPage from "./pages/Notification";
-// import BabyForm from "./pages/dashbord/BabyForm";
 import AdminDashboard from "./pages/admin/admin";
 import GrowthAnalysis from "./pages/dashbord/GrowthAnalysis";
 import { BirthRegistrationForm } from "./pages/dashbord/Birthregistrationform";
@@ -70,11 +70,11 @@ export default function App() {
             index
             element={<Dashboard onSelectChild={handleSelectChild} />}
           />
+          <Route path="child/:childId" element={<ChildProfilePage />} />
           <Route path="profile" element={<Profile />} />
           <Route path="reports" element={<Reports />} />
           <Route path="chatbot" element={<Chatbot />} />
           <Route path="notification" element={<NotificationPage />} />
-          {/* <Route path="babyform" element={<BabyForm />} /> */}
           <Route path="growth" element={<GrowthAnalysis />} />
           <Route path="birthregistration" element={<BirthRegistrationForm />} />
           <Route
@@ -86,7 +86,6 @@ export default function App() {
             element={<ImmunizationRecordForm />}
           />
           <Route path="upload-chart" element={<UploadChart childId="" />} />
-          {/* // <Route path="babycardupload" element={<BabyCardUpload />} /> */}
           <Route path="babyview/:babyId" element={<BabyView />} />
           <Route
             path="chart-upload"

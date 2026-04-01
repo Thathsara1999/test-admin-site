@@ -11,6 +11,11 @@ interface ImmunizationRecord {
   nextDue: string;
 }
 
+interface ImmunizationRecordFormProps {
+  childId?: string;
+  childData?: any;
+}
+
 const immunizationSchedule = [
   { age: "At Birth", vaccines: ["BCG", "OPV 0", "Hepatitis B 1"] },
   {
@@ -40,7 +45,10 @@ const immunizationSchedule = [
   },
 ];
 
-export const ImmunizationRecordForm: React.FC = () => {
+export const ImmunizationRecordForm: React.FC<ImmunizationRecordFormProps> = ({
+  childId,
+  childData,
+}) => {
   const [records, setRecords] = useState<ImmunizationRecord[]>([]);
   const [currentRecord, setCurrentRecord] = useState<ImmunizationRecord>({
     id: "",

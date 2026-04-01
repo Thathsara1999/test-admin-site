@@ -6,6 +6,10 @@ import { useNavigate, Link } from "react-router-dom";
 import { auth } from "../../lib/firebase";
 import axios from "axios";
 
+const FUNCTIONS_BASE_URL =
+  process.env.REACT_APP_FUNCTIONS_BASE_URL ||
+  "http://localhost:5001/child-health-system-6ba6d/us-central1";
+
 export default function SignUp() {
   const navigate = useNavigate();
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -15,6 +19,7 @@ export default function SignUp() {
     {
       name: "",
       email: "",
+      area: "",
       password: "",
       confirmPassword: "",
     },
@@ -49,11 +54,21 @@ export default function SignUp() {
       }
 
       /* 3️⃣ Save user to Firestore via your API */
-      await axios.post("/api/users", {
-        uid: user.uid,
-        name: formData.name,
-        email: formData.email,
-      });
+      await axios.post(
+        `${FUNCTIONS_BASE_URL}/registerUser`,
+        {
+          uid: user.uid,
+          name: formData.name,
+          email: formData.email,
+          role: "midwife",
+          area: formData.area,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
 
       /* 4️⃣ Navigate */
       navigate("/dashboard", { replace: true });
@@ -86,6 +101,14 @@ export default function SignUp() {
           type="email"
           placeholder="Email"
           value={formData.email}
+          onChange={handleChange}
+          className="w-full p-3 border rounded-xl"
+        />
+
+        <input
+          name="area"
+          placeholder="Midwife Area (e.g. Galle South)"
+          value={formData.area}
           onChange={handleChange}
           className="w-full p-3 border rounded-xl"
         />
