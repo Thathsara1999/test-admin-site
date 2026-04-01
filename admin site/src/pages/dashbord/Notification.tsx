@@ -9,7 +9,7 @@ type Appointment = {
 };
 
 const NotificationPages: React.FC = () => {
-  const [appointments, setAppointments] = useState<Appointment[]>([
+  const [appointments] = useState<Appointment[]>([
     {
       id: "1",
       child: "Liam",
@@ -31,7 +31,7 @@ const NotificationPages: React.FC = () => {
   // Initialize audio on component mount
   useEffect(() => {
     // Create audio element with correct public folder path
-    alarmRef.current = new Audio("../../../public/alarm.mp3"); // Just /alarm.mp3, not "../../../public/alarm.mp3"
+    alarmRef.current = new Audio("/alarm.mp3"); // Just /alarm.mp3, not "../../../public/alarm.mp3"
     alarmRef.current.load();
 
     // Clean up on unmount
@@ -74,13 +74,10 @@ const NotificationPages: React.FC = () => {
           // Send notification
           if (Notification.permission === "granted") {
             try {
-              const notification = new Notification(
-                `Reminder: ${appt.child} - ${appt.vaccine}`,
-                {
-                  body: `Due at ${due.toLocaleTimeString()}`,
-                  icon: "/favicon.ico", // Optional: add an icon
-                },
-              );
+              new Notification(`Reminder: ${appt.child} - ${appt.vaccine}`, {
+                body: `Due at ${due.toLocaleTimeString()}`,
+                icon: "/favicon.ico", // Optional: add an icon
+              });
 
               // Mark as sent
               notificationSentRef.current.add(notificationKey);
@@ -142,6 +139,18 @@ const NotificationPages: React.FC = () => {
     }
   };
 
+  const toggleSoundNotifications = () => {
+    setCanPlaySound((prev) => {
+      const next = !prev;
+
+      if (!next) {
+        stopAlarm();
+      }
+
+      return next;
+    });
+  };
+
   // Function to test sound manually
   const testSound = async () => {
     if (alarmRef.current) {
@@ -174,19 +183,16 @@ const NotificationPages: React.FC = () => {
       </h2>
 
       <div className="flex gap-4 mb-4">
-        {/* Button to allow sound */}
-        {!canPlaySound ? (
-          <button
-            className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-            onClick={() => setCanPlaySound(true)}
-          >
-            Enable Sound & Notifications
-          </button>
-        ) : (
-          <span className="px-4 py-2 bg-green-100 text-green-700 rounded">
-            ✓ Sound & Notifications Enabled
-          </span>
-        )}
+        <button
+          className={`px-4 py-2 text-white rounded ${
+            canPlaySound
+              ? "bg-green-600 hover:bg-green-700"
+              : "bg-blue-500 hover:bg-blue-600"
+          }`}
+          onClick={toggleSoundNotifications}
+        >
+          {canPlaySound ? "ON - Click to Turn OFF" : "OFF - Click to Turn ON"}
+        </button>
 
         {/* Button to stop alarm */}
         <button
@@ -212,7 +218,7 @@ const NotificationPages: React.FC = () => {
           1. Make sure you have an alarm.mp3 file in your{" "}
           <strong>public</strong> folder
         </p>
-        <p>2. Click "Enable Sound & Notifications" to allow notifications</p>
+        <p>2. Use the ON/OFF button to enable or disable sound alerts</p>
         <p>3. Click "Test Sound" to verify audio is working</p>
         <p>
           4. Notifications will appear for appointments due within 60 seconds

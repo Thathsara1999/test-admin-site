@@ -35,20 +35,20 @@ export default function MainLayout() {
       title: "MANAGEMENT",
       items: [
         { icon: User, label: "Profiles", path: "/dashboard/profile" },
-        { icon: FileText, label: "Records", path: "/dashboard/reports" },
+        // { icon: FileText, label: "Records", path: "/dashboard/reports" },
         { icon: Bell, label: "Notifications", path: "/dashboard/notification" },
       ],
     },
     {
       title: "BABY CARE",
       items: [
-        { icon: FilePlus, label: "Baby Form", path: "/dashboard/babyform" },
-        {
-          icon: Upload,
-          label: "Baby Card Upload",
-          path: "/dashboard/babycardupload",
-        },
-        { icon: Baby, label: "Baby View", path: "/dashboard/babyview" },
+        // { icon: FilePlus, label: "Baby Form", path: "/dashboard/babyform" },
+        // {
+        //   icon: Upload,
+        //   label: "Baby Card Upload",
+        //   path: "/dashboard/babycardupload",
+        // },
+        // { icon: Baby, label: "Baby View", path: "/dashboard/babyview" },
         {
           icon: ClipboardList,
           label: "Birth Registration",
@@ -69,11 +69,11 @@ export default function MainLayout() {
     {
       title: "ANALYTICS",
       items: [
-        {
-          icon: FileText,
-          label: "Growth Analysis",
-          path: "/dashboard/growth-analysis",
-        },
+        // {
+        //   icon: FileText,
+        //   label: "Growth Analysis",
+        //   path: "/dashboard/growth-analysis",
+        // },
         {
           icon: Upload,
           label: "Chart Upload",

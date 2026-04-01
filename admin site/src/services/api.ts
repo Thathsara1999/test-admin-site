@@ -33,6 +33,27 @@ export interface Measurement {
     notes?: string;
 }
 
+export interface ChatMessagePayload {
+    role: 'system' | 'user' | 'assistant';
+    content: string;
+}
+
+export interface ChatReplyRequest {
+    message: string;
+    messages?: ChatMessagePayload[];
+}
+
+const resolveChatReply = (data: any): string => {
+    if (typeof data?.reply === 'string' && data.reply.trim()) return data.reply;
+    if (typeof data?.message === 'string' && data.message.trim()) return data.message;
+    if (typeof data?.response === 'string' && data.response.trim()) return data.response;
+
+    const choiceContent = data?.choices?.[0]?.message?.content;
+    if (typeof choiceContent === 'string' && choiceContent.trim()) return choiceContent;
+
+    return 'I could not generate a response right now.';
+};
+
 export const babyAPI = {
     // Upload baby card
     uploadBabyCard: async (
@@ -68,5 +89,24 @@ export const babyAPI = {
     getBaby: async (babyId: string) => {
         const response = await api.get(`/baby/${babyId}`);
         return response.data;
+    },
+};
+
+export const chatAPI = {
+    getReply: async ({ message, messages = [] }: ChatReplyRequest): Promise<string> => {
+        const endpoint = process.env.REACT_APP_AI_ENDPOINT_URL;
+
+        if (endpoint && endpoint.trim()) {
+            const response = await axios.post(
+                endpoint,
+                { message, messages },
+                { timeout: 30000 }
+            );
+
+            return resolveChatReply(response.data);
+        }
+
+        const response = await api.post('/chat', { message, messages });
+        return resolveChatReply(response.data);
     },
 };
